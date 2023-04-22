@@ -38,4 +38,27 @@ router.get("/get/:id", async (req, res) => {
 
 });
 
+router.put("/users/:userId/formulas/:formulaId", async (req, res) => {
+    const userId = req.params.userId;
+    const formulaId = req.params.formulaId;
+
+    console.log("userID:",userId)
+    console.log("formulaID:",formulaId)
+    await User.findByIdAndUpdate(
+        userId,
+        { $pull: { formulas: { _id: formulaId} } },
+        { new: true}
+    )
+    .exec()
+    .then(updatedUser => {
+        console.log(`Formula ${formulaId} removed from user ${updatedUser._id}`);
+        console.log(updatedUser);
+        res.send({message: "Deletion successful"});
+    })
+    .catch(err => {        
+        console.log(err)
+        res.send({message: err});
+    })
+});
+
 module.exports = router;

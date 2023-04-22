@@ -50,11 +50,10 @@ router.post("/login", async(req, res) => {
 
     // No need to hash the password again as bcrypt.compare takes care of it
     bcrypt.compare(password, user.password, async function(err, valid) {
-        if (valid) {
-            
+        if (valid) {            
             user.token = token;
             await user.save();
-            res.status(200).send({username: user.username, id: user._id});
+            res.send({username: user.username, id: user._id});
         }
         else { res.status(400).send({message: "Invalid email or password"})}
     });        
@@ -88,12 +87,16 @@ router.put("/logout", async(req, res) => {
             user.token = null;
             await user.save();
             console.log("success")
-            res.send(200).status({message: "User successfully logged out."})
+            res.status({message: "User successfully logged out."})
         } catch (error) {
-            res.send(400).status({message: error})
+            console.log(error)
+            res.status({message: error})
         }
     }
-    else { res.send(400).status({message: "Could not find user from token."}) }
+    else { 
+        console.log("Could not find user from token.")
+        res.send({message: "Could not find user from token."}) 
+    }
 
 })
 
