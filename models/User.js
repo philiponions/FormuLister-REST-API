@@ -5,7 +5,8 @@ const schema = mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    Formulas: [Formula]
+    token: String,
+    formulas: [Formula]
 })
 
 exports.schema

@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const schema = mongoose.Schema({
     variables: [String],
-    expression: String
+    equation: String
 })
 
 exports.schema = schema 

@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const userRouter = require("./routes/user")
+const userRouter = require("./routes/user");
+const formulaRouter = require("./routes/formula")
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -18,9 +19,13 @@ async function connect() {
 
 connect();
 
+// Need these for json post requests to work
+app.use("/user", express.json());
+app.use("/formula", express.json());
 
-app.use("/user", express.json())
-app.use("/user", userRouter)
+app.use("/user", userRouter);
+app.use("/formula", formulaRouter);
+
 app.listen(8000, () => {    
     console.log('Server started on post 8000');
 })
