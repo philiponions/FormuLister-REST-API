@@ -12,11 +12,30 @@ router.post("/add", async(req, res) => {
         equation: equation
     })
     
-    let user = await User.findById(id);
-    user.formulas.push(newFormula);
-    await user.save();
+    try {
+        let user = await User.findById(id);
+        user.formulas.push(newFormula);
+        await user.save();
+        res.send("Formula successfully added");
+    
+    } catch (err) {
+        res.send({message: err})
+    }
 
-    res.send(req.body);
+});
+
+router.get("/get/:id", async (req, res) => {
+    const { id } = req.params;
+    console.log(id)
+
+    const user = await User.findById(id);        
+
+    if (user) {
+        res.send(user.formulas);
+    } else {
+        res.send("User not found")
+    }
+
 });
 
 module.exports = router;
