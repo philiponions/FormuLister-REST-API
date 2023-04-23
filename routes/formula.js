@@ -5,11 +5,12 @@ const Formula = require("../models/Formula").model
 const router = express.Router();
 
 router.post("/add", async(req, res) => {
-    const { id, equation, variables } = req.body;
+    const { id, equation, variables, title } = req.body;
     
     const newFormula = new Formula({
         variables: variables,        
-        equation: equation
+        equation: equation,
+        title: title
     })
     
     try {
