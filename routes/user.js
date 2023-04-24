@@ -84,8 +84,6 @@ router.post("/authenticate", async(req, res) => {
 
 router.put("/logout", async(req, res) => {
     const { token } = req.body
-
-    console.log(token)
     // Find user with provided username
     const user = await User.findOne({ token: token });
     
