@@ -16,23 +16,31 @@ router.post("/register", async(req, res) => {
 
     const saltRounds = 10;    
     
-    // Hash the password first before saving in db
-    bcrypt.hash(password, saltRounds, async function(err, hash) {        
+    const checkUserExists = await User.findOne({ $or: [{ username }, { email }] });
+    
+    // Check if the user already exists in the database
+    if (!checkUserExists) {
+        // Hash the password first before saving in db
+        bcrypt.hash(password, saltRounds, async function(err, hash) {        
+    
+            if (checkValidity(email)) {
+                const user = new User({
+                    username: username,
+                    password: hash,
+                    email: email
+                })
+                
+                // Save changees in db
+                await user.save();
+    
+                res.status(200).send("success");
+            }     
+            else { res.status(400).send("error") }
+        })
+    } else {
+        res.status(409).send("User with name/email already exists.");
+    }
 
-        if (checkValidity(email)) {
-            const user = new User({
-                username: username,
-                password: hash,
-                email: email
-            })
-            
-            // Save changees in db
-            await user.save()
-
-            res.status(200).send("success")
-        }     
-        else { res.status(400).send("error") }
-    })
 
 
 })

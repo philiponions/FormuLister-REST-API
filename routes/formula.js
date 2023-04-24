@@ -27,12 +27,20 @@ router.post("/add", async(req, res) => {
 
 router.get("/get/:id", async (req, res) => {
     const { id } = req.params;
-    console.log(id)
 
     const user = await User.findById(id);        
 
     if (user) {
-        res.send(user.formulas);
+        // Sort the results by date
+        const sortedList = user.formulas.sort(function(a, b) {
+            var keyA = a.createdAt, keyB = b.createdAt
+            // Compare the 2 dates
+            if (keyA > keyB) return -1;
+            if (keyA < keyB) return 1;
+            return 0;
+          });
+
+        res.send(sortedList);
     } else {
         res.send("User not found")
     }
@@ -42,9 +50,7 @@ router.get("/get/:id", async (req, res) => {
 router.put("/users/:userId/formulas/:formulaId", async (req, res) => {
     const userId = req.params.userId;
     const formulaId = req.params.formulaId;
-
-    console.log("userID:",userId)
-    console.log("formulaID:",formulaId)
+    
     await User.findByIdAndUpdate(
         userId,
         { $pull: { formulas: { _id: formulaId} } },
