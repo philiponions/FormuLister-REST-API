@@ -71,15 +71,17 @@ router.post("/login", async(req, res) => {
 router.post("/authenticate", async(req, res) => {
     const { token } = req.body
 
-    // Find user with provided username
-    const user = await User.findOne({ token: token });
-    
-    // If user not found, send an error response
-    if (!user) {
-        return res.status(400).send({message: "Invalid Token"});
-    }    
-    
-    res.status(200).send({username: user.username, id: user._id})
+    if (token) {
+        // Find user with provided username
+        const user = await User.findOne({ token: token });
+        
+        // If user not found, send an error response
+        if (!user) {
+            return res.status(400).send({message: "Invalid Token"});
+        }    
+        
+        res.status(200).send({username: user.username, id: user._id})
+    }
 })
 
 router.put("/logout", async(req, res) => {
