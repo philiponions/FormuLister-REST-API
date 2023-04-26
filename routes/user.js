@@ -82,6 +82,7 @@ router.post("/authenticate", async(req, res) => {
         
         res.status(200).send({username: user.username, id: user._id})
     }
+    else {return res.status(400).send({message: "There is no token"});}
 })
 
 router.put("/logout", async(req, res) => {
